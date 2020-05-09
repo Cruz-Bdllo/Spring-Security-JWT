@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.function.Function;
  * Clase que permite analizar el token de la solicitud, obteniendo el contenido de sus partes
  * (header, payload, signature), ademas de poder crear la estructura del token y el tipo de signature.
  */
+@Component
 public class JwtUtil {
     @Value("${token.palabra.secreta}")
     private String secreto;
@@ -26,7 +28,7 @@ public class JwtUtil {
      * @param token requiere el token para extraer la parte del claim
      * @return El conjunto de Claims
      */
-    private Claims extraerContenidoClaims(String token){
+    public Claims extraerContenidoClaims(String token){
         // parser: convierte a String, establece la clave para determinar si el JWT es valido dentro del header
         return Jwts.parser().setSigningKey(secreto).parseClaimsJws(token).getBody();
     } // fin del metodo
@@ -38,7 +40,7 @@ public class JwtUtil {
      * @param token Cualquier tipo de objeto (en este caso String <code>extraerUsername</code>)
      * @return Depende de quien lo invoque Object.class
      */
-    private Claims extraerPartesToken(String token, Claims resolvedorClaims){
+    public Claims extraerPartesToken(String token, Claims resolvedorClaims){
         final Claims claims = extraerContenidoClaims(token);
         return resolvedorClaims;
     } // fin del metodo
@@ -48,7 +50,7 @@ public class JwtUtil {
      * @param token token al que se le extraera el claim subject.
      * @return el username del token
      */
-    private String extraerUsername(String token){
+    public String extraerUsername(String token){
         return extraerContenidoClaims(token).getSubject();
     }
 
@@ -57,7 +59,7 @@ public class JwtUtil {
      * @param token token a extraer el tiempo de vencimiento
      * @return La fecha de vencimiento.
      */
-    private Date extraerTiempoVencimiento(String token){
+    public Date extraerTiempoVencimiento(String token){
         return extraerContenidoClaims(token).getExpiration();
     }
 
@@ -66,7 +68,7 @@ public class JwtUtil {
      * @param token Del que se extrae la fecha de vencimiento
      * @return si ya vencio o no el token
      */
-    private boolean isTokenExpiration(String token){
+    public boolean isTokenExpiration(String token){
         return extraerTiempoVencimiento(token).before(new Date());
     }
 
@@ -81,7 +83,7 @@ public class JwtUtil {
      * @param subject Establece el username del token
      * @return el String del payload del token
      */
-    private String prepararEstructuraToken(Map<String, Object> payload, String subject){
+    public String prepararEstructuraToken(Map<String, Object> payload, String subject){
         return Jwts.builder()
                 .setClaims(payload)
                 .setSubject(subject)
@@ -97,13 +99,13 @@ public class JwtUtil {
      * @param userDetails para obtener el username del usuario autenticado.
      * @return el token [header.payload.signature]
      */
-    private String creatToken(UserDetails userDetails){
+    public String creatToken(UserDetails userDetails){
         Map<String, Object> claims = new HashMap<>();
         return prepararEstructuraToken(claims, userDetails.getUsername());
     }
 
 
-    private boolean validarToken(String token, UserDetails userDetails){
+    public boolean validarToken(String token, UserDetails userDetails){
         final String username = extraerUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpiration(token));
     }

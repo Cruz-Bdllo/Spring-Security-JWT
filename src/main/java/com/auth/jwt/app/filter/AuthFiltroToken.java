@@ -1,6 +1,5 @@
 package com.auth.jwt.app.filter;
 
-import com.auth.jwt.app.security.service.MiUserDetails;
 import com.auth.jwt.app.security.service.MiUserDetailsService;
 import com.auth.jwt.app.security.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Clase que interceptara las peticiones para asegurarse de validar el token del usuario hacia el servidor
+ */
 @Component
 public class AuthFiltroToken extends OncePerRequestFilter {
 
@@ -30,7 +32,6 @@ public class AuthFiltroToken extends OncePerRequestFilter {
 
     /* ~ Metodos
     ==================================== */
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -69,7 +70,9 @@ public class AuthFiltroToken extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(userPassAuthToken);
             } // fin de la validacion del token con los datos de la BD
         }
+
         filterChain.doFilter(request, response);
     } // fin del metodo de filtradp
+
 
 } // fin de la clase

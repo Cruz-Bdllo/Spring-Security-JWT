@@ -2,6 +2,9 @@ package com.auth.jwt.app.payload;
 
 import java.io.Serializable;
 
+/**
+ * Clase usada para mapear los campos del formulario "inicio" para obtener los valores
+ */
 public class AutenticacionLogin implements Serializable {
     private static final long serialVersionUID = 1L;
     /* ~ Propiedades

@@ -1,6 +1,5 @@
 package com.auth.jwt.app.security.utils;
 
-import com.auth.jwt.app.security.service.MiUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * Clase que permite analizar el token de la solicitud, obteniendo el contenido de sus partes

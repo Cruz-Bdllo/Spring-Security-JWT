@@ -15,24 +15,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
+
+    /* ~ Autowired
+    -------------------------------------------------------------- */
     @Autowired
     private MiUserDetailsService userDetailsService;
 
+    @Autowired
+    private AuthFiltroToken authFiltroToken;
 
-    // Beans
+    /* ~ BEANS
+    -------------------------------------------------------------- */
     @Bean
     public BCryptPasswordEncoder passEncoder(){
         return new BCryptPasswordEncoder();
     }
 
-    @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception{
         return super.authenticationManagerBean();
     }
 
-    @Autowired
-    private AuthFiltroToken authFiltroToken;
 
     /**
      * Indicamos que queremos una autenticacion personalizada en este caso definimos el comportamiento
@@ -48,6 +51,13 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     // Establecemos que rutas y/o recursos estaran protegidos
+
+    /**
+     * Configuramos las rutas y/o recursos que queremos proteger y cuales establacer de modo publico, ademas de
+     * configurar nuestros propios filtros, login o logout.
+     * @param http URL usada para comparar el acceso
+     * @throws Exception Si no tiene acceso a los recursos
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -56,10 +66,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .anyRequest()
                     .authenticated()
-
-                .and()
-                    .formLogin()
-                    .permitAll()
                 .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

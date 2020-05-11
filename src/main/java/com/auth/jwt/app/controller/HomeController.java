@@ -20,33 +20,29 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class HomeController {
 
+    /* ~ Autowired
+    ------------------------------------------------------------------------------- */
     @Autowired
     private IRoleService roleService;
-
     @Autowired
     private IUsuarioService usuarioService;
-
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
-    // para inciar sesion
     @Autowired
     private AuthenticationManager authManager;
-
-
     @Autowired
     private MiUserDetailsService miUserDetailsService;
-
     @Autowired
     private JwtUtil jwtUtil;
 
+
+    /* ~ Rutas publicas
+    ------------------------------------------------------------------------------- */
     @GetMapping("/public")
     public String homePublic(){
         return "Pagina de inicio al publico";
     } // fin de la peticion
 
-
-    // El formulario registrar contara con los campos: username, correo, password
     @PostMapping("/registrarse")
     public ResponseEntity<?> registrarse(@RequestBody Usuario usuario){
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
@@ -54,6 +50,7 @@ public class HomeController {
         // Asignar role de user
         Role role = roleService.buscarRolePorId(3);
         usuario.agregarRoleALista(role);
+        usuario.setActivo(true);
         usuarioService.guardarUsuario(usuario);
 
         return ResponseEntity.ok("Usuario registrado correctamente");
@@ -68,7 +65,6 @@ public class HomeController {
             );
 
         }catch (BadCredentialsException ex){
-            System.out.println("errorrrr " +ex.getMessage());
             throw new Exception("Error en el username o contraseña " + ex.getMessage());
         } // fin de try~catch
 
@@ -78,9 +74,11 @@ public class HomeController {
 
         // Regresamos el token
         return ResponseEntity.ok(new AutenticacionResponse(token));
-        //return ResponseEntity.ok(autLogin.getUsername()+" "+autLogin.getPassword());
     } // fin para iniciar sesion
 
+
+    /* ~ Rutas privadas (requieren token)
+    ------------------------------------------------------------------------------- */
     @GetMapping("/home")
     public String userAuthenticated(){
         return "Welcome";

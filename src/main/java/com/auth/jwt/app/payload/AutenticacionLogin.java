@@ -2,7 +2,7 @@ package com.auth.jwt.app.payload;
 
 import java.io.Serializable;
 
-public class AutenticacionLigin implements Serializable {
+public class AutenticacionLogin implements Serializable {
     private static final long serialVersionUID = 1L;
     /* ~ Propiedades
     ==================================== */
@@ -11,9 +11,9 @@ public class AutenticacionLigin implements Serializable {
 
     /* ~ Metodos
     ==================================== */
-    public AutenticacionLigin() {}
+    public AutenticacionLogin() {}
 
-    public AutenticacionLigin(String username, String password) {
+    public AutenticacionLogin(String username, String password) {
         this.username = username;
         this.password = password;
     }

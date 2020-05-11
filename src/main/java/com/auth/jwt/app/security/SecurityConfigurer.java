@@ -1,13 +1,17 @@
 package com.auth.jwt.app.security;
 
+import com.auth.jwt.app.filter.AuthFiltroToken;
 import com.auth.jwt.app.security.service.MiUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
@@ -15,10 +19,20 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     private MiUserDetailsService userDetailsService;
 
 
+    // Beans
     @Bean
     public BCryptPasswordEncoder passEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception{
+        return super.authenticationManagerBean();
+    }
+
+    @Autowired
+    private AuthFiltroToken authFiltroToken;
 
     /**
      * Indicamos que queremos una autenticacion personalizada en este caso definimos el comportamiento
@@ -38,7 +52,21 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/public","/registrarse")
-                    .permitAll();
+                    .antMatchers("/registrarse", "/iniciar", "/public")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated()
+                .and()
+                    .logout().permitAll()
+                /*.and()
+                    .formLogin()
+                    .permitAll()
+
+                .and()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)*/;
+
+        // Indicamos que usaremos un filtro
+        // http.addFilterBefore(authFiltroToken, UsernamePasswordAuthenticationFilter.class);
     }
 } // fin de la clase de configuracion

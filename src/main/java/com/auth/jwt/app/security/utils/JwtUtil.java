@@ -20,7 +20,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
     @Value("${token.palabra.secreta}")
-    private String secreto;
+    private String SECRETO;
 
     /**
      * Este metodo solo extrae una parte del token [header.payload.signature] siendo los claims registrados
@@ -30,19 +30,7 @@ public class JwtUtil {
      */
     public Claims extraerContenidoClaims(String token){
         // parser: convierte a String, establece la clave para determinar si el JWT es valido dentro del header
-        return Jwts.parser().setSigningKey(secreto).parseClaimsJws(token).getBody();
-    } // fin del metodo
-
-    /** PENDIENTE A USAR (revisar)
-     * Utilizamos un generico que tenga que trajabar con la interfaz Claims
-     * @param token token que se pretende extraer
-     * @param resolvedorClaims sera de tipo String <b>extraerUsername</b>
-     * @param token Cualquier tipo de objeto (en este caso String <code>extraerUsername</code>)
-     * @return Depende de quien lo invoque Object.class
-     */
-    public Claims extraerPartesToken(String token, Claims resolvedorClaims){
-        final Claims claims = extraerContenidoClaims(token);
-        return resolvedorClaims;
+        return Jwts.parser().setSigningKey(SECRETO).parseClaimsJws(token).getBody();
     } // fin del metodo
 
     /**
@@ -51,6 +39,7 @@ public class JwtUtil {
      * @return el username del token
      */
     public String extraerUsername(String token){
+        //return extraerPartesToken(token,Claims::getSubject);
         return extraerContenidoClaims(token).getSubject();
     }
 
@@ -60,6 +49,7 @@ public class JwtUtil {
      * @return La fecha de vencimiento.
      */
     public Date extraerTiempoVencimiento(String token){
+        //return extraerPartesToken(token, Claims::getExpiration);
         return extraerContenidoClaims(token).getExpiration();
     }
 
@@ -69,6 +59,7 @@ public class JwtUtil {
      * @return si ya vencio o no el token
      */
     public boolean isTokenExpiration(String token){
+
         return extraerTiempoVencimiento(token).before(new Date());
     }
 
@@ -88,8 +79,8 @@ public class JwtUtil {
                 .setClaims(payload)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 *60 * 10))
-                .signWith(SignatureAlgorithm.HS512, secreto)
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 *60 *60* 10))
+                .signWith(SignatureAlgorithm.HS512, SECRETO)
                 .compact();
     } // fin del metodo
 

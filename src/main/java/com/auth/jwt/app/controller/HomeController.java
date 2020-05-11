@@ -81,4 +81,9 @@ public class HomeController {
         //return ResponseEntity.ok(autLogin.getUsername()+" "+autLogin.getPassword());
     } // fin para iniciar sesion
 
+    @GetMapping("/home")
+    public String userAuthenticated(){
+        return "Welcome";
+    }
+
 } // fin del controlador home

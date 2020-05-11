@@ -56,17 +56,15 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .anyRequest()
                     .authenticated()
+
                 .and()
-                    .logout().permitAll()
-                /*.and()
                     .formLogin()
                     .permitAll()
-
                 .and()
                     .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)*/;
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Indicamos que usaremos un filtro
-        // http.addFilterBefore(authFiltroToken, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authFiltroToken, UsernamePasswordAuthenticationFilter.class);
     }
 } // fin de la clase de configuracion

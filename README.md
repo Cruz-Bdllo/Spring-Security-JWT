@@ -156,8 +156,8 @@ spring.datasource.password=[tu_contraseña]
 
 
 [img-diagram]:https://grokonez.com/wp-content/uploads/2018/12/angular-nodejs-jwt-authentication-example-work-process-diagram.png "diagrama de proceso JWT"
-[img-mer]: http://www.goog.com "diagrama de Entidad Relación"
-[img-public]: http://www.goog.com "diagrama de Entidad Relación"
-[img-registro]: http://www.goog.com  "Registro"
-[img-login]: https://drive.google.com/open?id=12QNI4XOqnsv8Fv1AL39sPtkfjobA2BuF  "Iniciar sesión"
-[img-path-sec]: http://www.goog.com "Ruta protegida"
+[img-mer]: https://raw.githubusercontent.com/Cruz-Bdllo/Spring-Security-JWT/master/img-project/mer.png "diagrama de Entidad Relación"
+[img-public]: https://raw.githubusercontent.com/Cruz-Bdllo/Spring-Security-JWT/master/img-project/pagina_public.png "diagrama de Entidad Relación"
+[img-registro]: https://raw.githubusercontent.com/Cruz-Bdllo/Spring-Security-JWT/master/img-project/pagina%20registro.png  "Registro"
+[img-login]: https://raw.githubusercontent.com/Cruz-Bdllo/Spring-Security-JWT/master/img-project/iniciar.png  "Iniciar sesión"
+[img-path-sec]: https://raw.githubusercontent.com/Cruz-Bdllo/Spring-Security-JWT/master/img-project/ruta%20protegida.png "Ruta protegida"
